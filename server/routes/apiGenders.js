@@ -7,7 +7,7 @@ const { API_KEY } = require('../constants')
 router.post('/', (req, res) => {
   const {
     apiKey,
-    genderId = '',
+    genderId,
   } = req.body
 
   if(API_KEY !== apiKey) {
@@ -16,15 +16,28 @@ router.post('/', (req, res) => {
   }
 
   if(API_KEY === apiKey) {
-    gendersModel.find({genderId}, (err, genders) => {
-      if(genders.length) {
-        res.status(200)
-        res.json(genders)
-      } else {
-        res.status(400)
-        res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
-      }
-    })
+    if(!genderId) {
+      gendersModel.find({}, (err, genders) => {
+        if(genders.length) {
+          res.status(200)
+          res.json(genders)
+        } else {
+          res.status(400)
+          res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
+        }
+      })
+    }
+    if(genderId) {
+      gendersModel.find({genderId}, (err, genders) => {
+        if(genders.length) {
+          res.status(200)
+          res.json(genders)
+        } else {
+          res.status(400)
+          res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
+        }
+      })
+    }
   }
 })
 
