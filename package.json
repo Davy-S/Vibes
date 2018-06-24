@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.1.4"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "startdev": "nodemon index.js",
+    "heroku-postbuild": "cd client && yarn && yarn run build"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
+  },
+  "proxy": "http://localhost:3001/"
+}
