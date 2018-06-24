@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const app = express()
-const musicGenres = require('../model/MusicGenres.js')
+const musicGenres = require('../model/MusicGenres')
 const { API_KEY } = require('../constants')
 
 router.post('/', (req, res) => {

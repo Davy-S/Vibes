@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const app = express()
-const gendersModel = require('../model/Genders.js')
+const gendersModel = require('../model/Genders')
 const { API_KEY } = require('../constants')
 
 router.post('/', (req, res) => {

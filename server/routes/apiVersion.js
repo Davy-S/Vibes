@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const app = express()
-const Version = require('../model/version')
+const Version = require('../model/Version')
 const { API_KEY } = require('../constants')
 
 router.post('/', (req, res) => {
