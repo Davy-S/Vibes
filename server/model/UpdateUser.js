@@ -8,4 +8,4 @@ const updateUserSchema = mongoose.Schema({
   city: {type: String},
 }, {collection: 'users'})
 
-module.exports = mongoose.model('UpdateUser', updateUserSchema, 'users')
+module.exports = mongoose.model('UpdateUser', updateUserSchema)

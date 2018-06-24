@@ -8,4 +8,4 @@ const createUserSchema = mongoose.Schema({
   password: {type: String, required: true},
 }, {collection: 'users'})
 
-module.exports = mongoose.model('CreateUser', createUserSchema, 'users')
+module.exports = mongoose.model('CreateUser', createUserSchema)

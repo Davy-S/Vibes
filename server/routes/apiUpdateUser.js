@@ -22,6 +22,7 @@ router.post('/', (req, res) => {
   if(API_KEY === apiKey) {
     updateUser.find({userId}, (err, user) => {
       if(user.length === 1) {
+        user.userId = userId
         user.firstName = firstName
         user.lastName = lastName
         user.birthDate = birthDate
