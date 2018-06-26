@@ -66,14 +66,18 @@ class adminUsers extends Component {
               <Table.Cell>
                 {user.city}
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell
+                textAlign="center"
+              >
                 <Icon
                   name="edit"
                   fitted
                   onClick={() => this.handleEdit(user)}
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell
+                textAlign="center"
+              >
                 <Icon
                   name="delete"
                   fitted
