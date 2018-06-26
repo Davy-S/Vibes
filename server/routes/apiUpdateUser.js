@@ -7,7 +7,7 @@ const { API_KEY } = require('../constants')
 router.post('/', (req, res) => {
   const {
     apiKey,
-    userId,
+    _id,
     firstName,
     lastName,
     birthDate,
@@ -20,23 +20,15 @@ router.post('/', (req, res) => {
   }
 
   if(API_KEY === apiKey) {
-    updateUser.find({userId}, (err, user) => {
-      if(user.length === 1) {
-        user.userId = userId
-        user.firstName = firstName
-        user.lastName = lastName
-        user.birthDate = birthDate
-        user.city = city
-
-        user.save((err) => {
-          err ? handleError(err) :
-          res.status(200)
-          res.json({code: "VIBES_UPDATE_OK", message: "USER_UPDATED"})
-        })
-      }
-      if(!user.length) {
+    updateUser.findOneAndUpdate({_id},
+      {$set: {firstName: firstName, lastName: lastName, birthDate: birthDate, city: city}},
+      (err, user) => {
+      if(err) {
         res.status(400)
         res.json({code: "VIBES_UPDATE_KO", message: "User does not exist"})
+      } else {
+        res.status(200)
+        res.json({code: "VIBES_UPDATE_OK", message: "USER_UPDATED"})
       }
     })
   }
