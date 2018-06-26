@@ -18,28 +18,28 @@ router.post('/', (req, res) => {
   if(API_KEY === apiKey) {
     if(!_id) {
       musicGenres.find({}, (err, musicGenres) => {
-        if(musicGenres.length) {
+        if(musicGenres) {
           res.status(200)
-          res.json(musicGenres)
-        }
-        if(!musicGenres.length) {
+          res.json({musicGenres})
+        } else {
           res.status(400)
           res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
         }
       })
     }
+
     if(_id) {
       musicGenres.find({_id}, (err, musicGenres) => {
-        if(musicGenres.length) {
+        if(musicGenres) {
           res.status(200)
-          res.json(musicGenres)
-        }
-        if(!musicGenres.length) {
+          res.json({musicGenres})
+        } else {
           res.status(400)
           res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
         }
       })
     }
+
   }
 })
 
