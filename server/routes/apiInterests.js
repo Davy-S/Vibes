@@ -7,7 +7,7 @@ const { API_KEY } = require('../constants')
 router.post('/', (req, res) => {
   const {
     apiKey,
-    interests = '',
+    _id,
   } = req.body
 
   if(API_KEY !== apiKey) {
@@ -16,6 +16,18 @@ router.post('/', (req, res) => {
   }
 
   if(API_KEY === apiKey) {
+    if(_id) {
+      interestsModel.find({_id}, (err, interests) => {
+        if(interests.length) {
+          res.status(200)
+          res.json({interests})
+        } else {
+          res.status(400)
+          res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
+        }
+      })
+    }
+  if(!_id) {
     interestsModel.find({}, (err, interests) => {
       if(interests.length) {
         res.status(200)
@@ -25,6 +37,7 @@ router.post('/', (req, res) => {
         res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
       }
     })
+  }
   }
 })
 
