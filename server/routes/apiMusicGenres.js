@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
         }
       })
     }
-    if(musicGenres) {
+    if(_id) {
       musicGenres.find({_id}, (err, musicGenres) => {
         if(musicGenres.length) {
           res.status(200)
