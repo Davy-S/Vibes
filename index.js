@@ -13,6 +13,7 @@ const apiUpdateUser = require('./server/routes/apiUpdateUser')
 const apiMusicGenres = require('./server/routes/apiMusicGenres')
 const apiInterests = require('./server/routes/apiInterests')
 const apiGenders = require('./server/routes/apiGenders')
+const apiGetAllUsers = require('./server/routes/apiGetAllUsers')
 //DB URI
 const { mongoDB } = require('./server/constants')
 
@@ -31,6 +32,7 @@ app.use('/vibes/api/updateProfile', apiUpdateUser)
 app.use('/vibes/api/musicGenres', apiMusicGenres)
 app.use('/vibes/api/interests', apiInterests)
 app.use('/vibes/api/genders', apiGenders)
+app.use('/vibes/api/getAllUsers', apiGetAllUsers)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/build/index.html'))
