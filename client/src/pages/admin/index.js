@@ -24,19 +24,17 @@ class Admin extends Component {
       .then(res => res.json())
       .then(version => this.setState({ version }))
 
-  }
-  componentWillMount() {
-    fetch('/vibes/api/getAllUsers', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({ apiKey }),
-    })
+      fetch('/vibes/api/getAllUsers', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({ apiKey }),
+      })
       .then(res => res.json())
       .then(users => this.setState({ users }))
   }
-
+  
   render() {
     const {
       version,
