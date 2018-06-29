@@ -20,17 +20,22 @@ router.post('/', (req, res) => {
   }
 
   if(API_KEY === apiKey) {
-    updateUser.findOneAndUpdate({_id},
-      {$set: {firstName: firstName, lastName: lastName, birthDate: birthDate, city: city}},
-      (err, user) => {
-      if(err) {
-        res.status(400)
-        res.json({code: "VIBES_UPDATE_KO", message: "User does not exist"})
-      } else {
-        res.status(200)
-        res.json({code: "VIBES_UPDATE_OK", message: "USER_UPDATED"})
-      }
-    })
+    if(_id) {
+      updateUser.findOneAndUpdate({_id},
+        {$set: {firstName: firstName, lastName: lastName, birthDate: birthDate, city: city}},
+        (err, user) => {
+          if(err) {
+            res.status(400)
+            res.json({code: "VIBES_UPDATE_KO", message: "User does not exist"})
+          } else {
+            res.status(200)
+            res.json({code: "VIBES_UPDATE_OK", message: "USER_UPDATED"})
+          }
+        })
+    } else {
+      res.status(400)
+      res.json({code: "VIBES_UPDATE_KO", message: "id is required"})
+    }
   }
 
   const handleError = (e) => {
