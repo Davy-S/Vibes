@@ -3,6 +3,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const path = require('path')
+const jwt = require('jsonwebtoken')
+const exjwt = require('express-jwt')
 const app = express()
 const port = (process.env.PORT || '5000')
 
@@ -24,6 +26,10 @@ app.use(express.static(path.join(__dirname + '/client/build')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
+const jwtMW = exjwt({
+  secret: 'JeanPierrePernault'
+})
+
 //Routes
 app.use('/vibes/api/login', apiLogin)
 app.use('/vibes/api/version', apiVersion)
@@ -33,6 +39,11 @@ app.use('/vibes/api/musicGenres', apiMusicGenres)
 app.use('/vibes/api/interests', apiInterests)
 app.use('/vibes/api/genders', apiGenders)
 app.use('/vibes/api/getAllUsers', apiGetAllUsers)
+
+
+app.get('/tokentest', jwtMW, (req, res) => {
+  res.send("You are authenticated")
+})
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/build/index.html'))

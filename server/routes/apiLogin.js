@@ -1,7 +1,8 @@
 const express = require('express')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const router = express.Router()
 const app = express()
-const bcrypt = require('bcrypt')
 const Login = require('../model/Login')
 const { API_KEY } = require('../constants')
 
@@ -22,21 +23,21 @@ router.post('/', (req, res) => {
       if(err) {
         res.status(400)
         res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
+      }
+      if(user) {
+        bcrypt.compare(password, user.password, (err, result) => {
+          if(result === true) {
+            let token = jwt.sign({ id: user._id, email }, 'JeanPierrePernault', { expiresIn: 3600 })
+            res.status(200)
+            res.json({userId: user._id, userToken: token, lastActiveDate: 'G po la date', refreshToken: 'Plus tard!'})
+          } else {
+            res.status(400)
+            res.json({code: "VIBES_BAD_LOGPWD", message: "Identifiants non reconnus"})
+          }
+        })
       } else {
-        if(user) {
-          bcrypt.compare(password, user.password, (err, result) => {
-            if(result === true) {
-              res.status(200)
-              res.json({userId: user._id, userToken: '', lastActiveDate: '', refreshToken: ''})
-            } else {
-              res.status(400)
-              res.json({code: "VIBES_BAD_LOGPWD", message: "Identifiants non reconnus"})
-            }
-          })
-        } else {
-          res.status(400)
-          res.json({code: "VIBES_BAD_LOGPWD", message: "Identifiants non reconnus"})
-        }
+        res.status(400)
+        res.json({code: "VIBES_BAD_LOGPWD", message: "Identifiants non reconnus"})
       }
     })
   }
