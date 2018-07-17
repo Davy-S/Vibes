@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 const createUserSchema = mongoose.Schema({
   apiKey: {type: String, required: true},
