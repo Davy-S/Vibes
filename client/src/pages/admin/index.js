@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Container } from 'semantic-ui-react'
 import AdminVersion from './adminVersion'
 import AdminUsers from './adminUsers'
 import { apiKey } from '../_shared/constants'
@@ -47,16 +48,18 @@ class Admin extends Component {
       users: {users},
     } = this.state
     return (
-      <div>
-        <AdminVersion
-          {...version}
-        />
-      {users ?
-        <AdminUsers
-          users={users}
+      <div style={{marginTop: "25px"}}>
+        <Container>
+          <AdminVersion
+            {...version}
           />
-        : null
-      }
+        {users ?
+          <AdminUsers
+            users={users}
+          />
+          : null
+        }
+        </Container>
       </div>
     )
   }
