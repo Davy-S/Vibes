@@ -1,12 +1,16 @@
 require('babel-polyfill')
 const express = require('express')
+const app = express()
+const http = require('http')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const path = require('path')
 const jwt = require('jsonwebtoken')
 const exjwt = require('express-jwt')
-const app = express()
 const port = (process.env.PORT || '5000')
+//Sockets
+const server = http.createServer(app)
+const io = require('socket.io').listen(server)
 
 const apiLogin = require('./server/routes/apiLogin')
 const apiVersion = require('./server/routes/apiVersion')
@@ -16,6 +20,9 @@ const apiMusicGenres = require('./server/routes/apiMusicGenres')
 const apiInterests = require('./server/routes/apiInterests')
 const apiGenders = require('./server/routes/apiGenders')
 const apiGetAllUsers = require('./server/routes/apiGetAllUsers')
+//Sockets
+require('./server/apiSockets.js')(io)
+
 //DB URI
 const { mongoDB } = require('./server/constants')
 
@@ -40,7 +47,6 @@ app.use('/vibes/api/interests', apiInterests)
 app.use('/vibes/api/genders', apiGenders)
 app.use('/vibes/api/getAllUsers', apiGetAllUsers)
 
-
 app.get('/tokentest', jwtMW, (req, res) => {
   res.send("You are authenticated")
 })
@@ -56,5 +62,7 @@ const db = mongoose.connection
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
+//Sockets
+
 //Server
-app.listen(port, () => console.log(`connected on port ${port}`))
+server.listen(port, () => console.log(`connected on port ${port}`))
