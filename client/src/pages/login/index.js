@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Grid, Form, Button, Message } from 'semantic-ui-react'
 import { apiKey } from '../_shared/constants'
+import AuthService from '../_components/AuthService'
 
 class Login extends Component {
   constructor() {
@@ -13,13 +14,21 @@ class Login extends Component {
       loginFailure: false,
       wrongInputFormat: false,
     }
+    this.Auth = new AuthService()
   }
-  handleEmailChange = (e, { value }) => {
-    this.setState({ email: value })
+
+  componentWillMount(){
+    if(this.Auth.loggedIn()) {
+      console.log("already logged in")
+    }
   }
-  handlePasswordChange = (e, { value }) => {
-    this.setState({ password: value })
+
+  handleChange = (e, { value }) => {
+    this.setState({
+      [e.target.name]: value
+    })
   }
+
   handleSubmit = (e) => {
     e.preventDefault()
     this.setState({loginFailure: false, wrongInputFormat: false, loginSuccess: false })
@@ -29,21 +38,17 @@ class Login extends Component {
     } = this.state
 
     if(email && password) {
-      fetch('/vibes/api/login', {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({ apiKey, email, password }),
-      })
-        .then(res => res.json())
-        .then(res => {
-          if(res.userToken) {
-            this.setState({ loginSuccess: true })
-          } else {
-            this.setState({ loginFailure: true })
-          }
+      this.Auth.login(apiKey, email, password)
+        .then(res =>{
+           //this.props.history.replace('/');
+           console.log(res)
+           this.setState({ loginSuccess: true })
         })
+        .catch(err =>{
+          console.log(err)
+          this.setState({ loginFailure: true })
+        })
+
     } else {
       this.setState({ wrongInputFormat: true })
     }
@@ -55,9 +60,8 @@ class Login extends Component {
         <Grid centered columns={4}>
           <Grid.Column style={{marginTop: "17%"}}>
             <Form error={this.state.loginFailure} success={this.state.loginSuccess} onSubmit={this.handleSubmit}>
-              <Form.Input placeholder='Email' type="email" onChange={this.handleEmailChange} />
-              <Form.Input placeholder='Password' type="password" onChange={this.handlePasswordChange} />
-              <br />
+              <Form.Input placeholder='Email' name="email" type="email" onChange={this.handleChange} />
+              <Form.Input placeholder='Password' name="password" type="password" onChange={this.handleChange} />
               <Message success header='Logged In' />
               <Message error header='Wrong credentials' />
               {this.state.wrongInputFormat ?
@@ -66,6 +70,7 @@ class Login extends Component {
                 </Message>
                 : null
               }
+              <br />
               <Button content="Login" type="submit" color="teal" style={{borderRadius: "60px"}} fluid/>
             </Form>
           </Grid.Column>

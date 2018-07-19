@@ -17,18 +17,13 @@ class Home extends Component {
       wrongInputFormat: false,
     }
   }
-  handleEmailChange = (e, { value }) => {
-    this.setState({ email: value })
+
+  handleChange = (e, { value }) => {
+    this.setState({
+      [e.target.name]: value
+    })
   }
-  handlefirstNameChange = (e, { value }) => {
-    this.setState({ firstName: value })
-  }
-  handleLastNameChange = (e, { value }) => {
-    this.setState({ lastName: value })
-  }
-  handlePasswordChange = (e, { value }) => {
-    this.setState({ password: value })
-  }
+
 
   handleSubmit = (e) => {
     e.preventDefault()
@@ -62,8 +57,6 @@ class Home extends Component {
     }
   }
 
-
-
   render() {
     return(
       <div>
@@ -76,19 +69,19 @@ class Home extends Component {
           <Grid.Row>
             <Grid.Column style={{marginTop: "9%"}}>
               <Form error={this.state.registerFailure} success={this.state.registerSuccess} onSubmit={this.handleSubmit} >
-                <Form.Input placeholder='Email' type="email" onChange={this.handleEmailChange} />
-                <Form.Input placeholder='Prénom' onChange={this.handlefirstNameChange} />
-                <Form.Input placeholder='Nom' onChange={this.handleLastNameChange} />
-                <Form.Input placeholder='Mot de passe' type="password" onChange={this.handlePasswordChange} />
+                <Form.Input placeholder='Email' name="email" type="email" onChange={this.handleEmailChange} />
+                <Form.Input placeholder='Prénom' name="firstName" onChange={this.handlefirstNameChange} />
+                <Form.Input placeholder='Nom' name="lastName" onChange={this.handleLastNameChange} />
+                <Form.Input placeholder='Mot de passe' name="password" type="password" onChange={this.handlePasswordChange} />
                 <br />
-                  <Message success header='Account created' />
-                  <Message error header='Email already taken' />
-                  {this.state.wrongInputFormat ?
-                    <Message negative>
-                      <Message.Header>All Inputs must be filled</Message.Header>
-                    </Message>
-                    : null
-                  }
+                <Message success header='Account created' />
+                <Message error header='Email already taken' />
+                {this.state.wrongInputFormat ?
+                  <Message negative>
+                    <Message.Header>All Inputs must be filled</Message.Header>
+                  </Message>
+                  : null
+                }
                 <Button content="Inscription" type="submit" color="teal" fluid style={{borderRadius: "60px"}}/>
               </Form>
             </Grid.Column>
