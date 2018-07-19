@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Form, Button, Message } from 'semantic-ui-react'
+import { Grid, Form, Button, Message } from 'semantic-ui-react'
 import { apiKey } from '../_shared/constants'
 
 class Login extends Component {
@@ -51,22 +51,25 @@ class Login extends Component {
 
   render() {
     return(
-      <div style={{ marginTop: "25px" }}>
-        <Container text>
-          <Form error={this.state.loginFailure} success={this.state.loginSuccess} onSubmit={this.handleSubmit}>
-            <Form.Input label='Email' type="email" onChange={this.handleEmailChange} />
-            <Form.Input label='Password' type="password" onChange={this.handlePasswordChange} />
-            <Message success header='Logged In' />
-            <Message error header='Wrong credentials' />
-            {this.state.wrongInputFormat ?
-              <Message negative>
-                <Message.Header>All Inputs must be filled</Message.Header>
-              </Message>
-              : null
-            }
-            <Button content="Login" type="submit" color="teal" />
-          </Form>
-        </Container>
+      <div>
+        <Grid centered columns={4}>
+          <Grid.Column style={{marginTop: "18%"}}>
+            <Form error={this.state.loginFailure} success={this.state.loginSuccess} onSubmit={this.handleSubmit}>
+              <Form.Input placeholder='Email' type="email" onChange={this.handleEmailChange} />
+              <Form.Input placeholder='Password' type="password" onChange={this.handlePasswordChange} />
+              <br />
+              <Message success header='Logged In' />
+              <Message error header='Wrong credentials' />
+              {this.state.wrongInputFormat ?
+                <Message negative>
+                  <Message.Header>All Inputs must be filled</Message.Header>
+                </Message>
+                : null
+              }
+              <Button content="Login" type="submit" color="teal" style={{borderRadius: "60px"}} fluid/>
+            </Form>
+          </Grid.Column>
+        </Grid>
       </div>
     )
   }
