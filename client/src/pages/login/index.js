@@ -53,7 +53,7 @@ class Login extends Component {
     return(
       <div>
         <Grid centered columns={4}>
-          <Grid.Column style={{marginTop: "18%"}}>
+          <Grid.Column style={{marginTop: "17%"}}>
             <Form error={this.state.loginFailure} success={this.state.loginSuccess} onSubmit={this.handleSubmit}>
               <Form.Input placeholder='Email' type="email" onChange={this.handleEmailChange} />
               <Form.Input placeholder='Password' type="password" onChange={this.handlePasswordChange} />

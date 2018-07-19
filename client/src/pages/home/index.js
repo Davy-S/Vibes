@@ -9,12 +9,12 @@ class Home extends Component {
       <div>
         <Grid textAlign="center" columns={4}>
           <Grid.Row>
-            <Grid.Column floated="right" style={{marginTop: "3%", marginRight: "15px"}}>
+            <Grid.Column floated="right" style={{marginTop: "2%", marginRight: "15px"}}>
               <Button as={Link} to="/login" color="teal" content="Connexion" fluid style={{borderRadius: "60px"}} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Grid.Column style={{marginTop: "10%"}}>
+            <Grid.Column style={{marginTop: "9%"}}>
               <Form >
                 <Form.Input placeholder='Email' type="email" />
                 <Form.Input placeholder='Nom' />

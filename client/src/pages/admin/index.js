@@ -48,8 +48,9 @@ class Admin extends Component {
       users: {users},
     } = this.state
     return (
-      <div style={{marginTop: "25px"}}>
+      <div style={{paddingTop: "15%"}}>
         <Container>
+
           <AdminVersion
             {...version}
           />
@@ -59,7 +60,7 @@ class Admin extends Component {
           />
           : null
         }
-        </Container>
+      </Container>
       </div>
     )
   }
