@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const router = express.Router()
 const app = express()
-const Login = require('../model/Login')
+const GetProfiles = require('../model/GetProfiles')
 const { API_KEY } = require('../constants')
 
 router.post('/', (req, res) => {
@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
       if(user) {
         bcrypt.compare(password, user.password, (err, result) => {
           if(result === true) {
-            let token = jwt.sign({ id: user._id, email }, 'JeanPierrePernault', { expiresIn: 129600 })
+            let token = jwt.sign({ id: user._id, email }, 'JeanPierrePernault', { expiresIn: 3600 })
             res.status(200)
             res.json({userId: user._id, userToken: token, lastActiveDate: 'G po la date', refreshToken: 'Plus tard!'})
           } else {
