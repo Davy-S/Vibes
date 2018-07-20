@@ -10,7 +10,6 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      loginSuccess: false,
       loginFailure: false,
       wrongInputFormat: false,
     }
@@ -31,7 +30,7 @@ class Login extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.setState({loginFailure: false, wrongInputFormat: false, loginSuccess: false })
+    this.setState({loginFailure: false, wrongInputFormat: false })
     const {
       email,
       password
@@ -61,7 +60,6 @@ class Login extends Component {
             <Form error={this.state.loginFailure} success={this.state.loginSuccess} onSubmit={this.handleSubmit}>
               <Form.Input placeholder='Email' name="email" type="email" onChange={this.handleChange} />
               <Form.Input placeholder='Password' name="password" type="password" onChange={this.handleChange} />
-              <Message success header='Logged In' />
               <Message error header='Wrong credentials' />
               {this.state.wrongInputFormat ?
                 <Message negative>

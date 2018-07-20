@@ -20,18 +20,21 @@ router.post('/', (req, res) => {
   }
 
   if(API_KEY === apiKey) {
+    const fullName = firstName + lastName
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
         console.log(err)
       }
-      const hashPassword = hash
+
       const newUser = new createUser({
         apiKey,
         lastName,
         firstName,
+        fullName,
         email,
-        password: hashPassword,
+        password: hash,
       })
+
       createUser.find({email}, (err, docs) => {
         if(!docs.length) {
           newUser.save((err) => {
