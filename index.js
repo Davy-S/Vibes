@@ -20,6 +20,7 @@ const apiMusicGenres = require('./server/routes/apiMusicGenres')
 const apiInterests = require('./server/routes/apiInterests')
 const apiGenders = require('./server/routes/apiGenders')
 const apiGetAllUsers = require('./server/routes/apiGetAllUsers')
+const apiGetProfiles = require('./server/routes/apiGetProfiles')
 //Sockets
 require('./server/apiSockets.js')(io)
 
@@ -46,6 +47,7 @@ app.use('/vibes/api/musicGenres', apiMusicGenres)
 app.use('/vibes/api/interests', apiInterests)
 app.use('/vibes/api/genders', apiGenders)
 app.use('/vibes/api/getAllUsers', apiGetAllUsers)
+app.use('/vibes/api/getProfiles', apiGetProfiles)
 
 app.get('/tokentest', jwtMW, (req, res) => {
   res.send("You are authenticated")

@@ -9,9 +9,6 @@ const { API_KEY } = require('../constants')
 router.post('/', (req, res) => {
   const {
     apiKey,
-    userId,
-    userToken,
-    profileId,
     nameContaining,
    } = req.body
 
@@ -21,7 +18,9 @@ router.post('/', (req, res) => {
   }
 
   if(API_KEY === apiKey) {
-    GetProfiles.find({fullName : {$regex : `.${nameContaining}.`}}, (err, users) => {
+    let regex = new RegExp([".*", nameContaining, "*."].join(""), "i")
+    // GetProfiles.find({$or : [{firstName : {$regex : regex}}, {lastName: {$regex : regex}}] }, (err, users) => {
+    GetProfiles.find({fullName : {$regex : regex}}, (err, users) => {
       if(!err) {
         res.status(200)
         res.json({users})

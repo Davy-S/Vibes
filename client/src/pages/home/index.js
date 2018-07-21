@@ -47,7 +47,7 @@ class Home extends Component {
         .then(res => res.json())
         .then(res => {
           if(res.code === "VIBES_CREATION_OK") {
-            this.setState({ registerSuccess: true })
+            this.props.history.replace('/login')
           } else {
             this.setState({ registerFailure: true })
           }
@@ -69,10 +69,10 @@ class Home extends Component {
           <Grid.Row>
             <Grid.Column style={{marginTop: "9%"}}>
               <Form error={this.state.registerFailure} success={this.state.registerSuccess} onSubmit={this.handleSubmit} >
-                <Form.Input placeholder='Email' name="email" type="email" onChange={this.handleEmailChange} />
-                <Form.Input placeholder='Prénom' name="firstName" onChange={this.handlefirstNameChange} />
-                <Form.Input placeholder='Nom' name="lastName" onChange={this.handleLastNameChange} />
-                <Form.Input placeholder='Mot de passe' name="password" type="password" onChange={this.handlePasswordChange} />
+                <Form.Input placeholder='Email' name="email" type="email" onChange={this.handleChange} />
+                <Form.Input placeholder='Prénom' name="firstName" onChange={this.handleChange} />
+                <Form.Input placeholder='Nom' name="lastName" onChange={this.handleChange} />
+                <Form.Input placeholder='Mot de passe' name="password" type="password" onChange={this.handleChange} />
                 <br />
                 <Message success header='Account created' />
                 <Message error header='Email already taken' />

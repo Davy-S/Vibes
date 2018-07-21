@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
   }
 
   if(API_KEY === apiKey) {
-    const fullName = firstName + lastName
+    const fullName = `${firstName} ${lastName}`
     bcrypt.hash(password, 10, (err, hash) => {
       if (err) {
         console.log(err)
