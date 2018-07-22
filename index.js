@@ -1,10 +1,16 @@
 require('babel-polyfill')
 const express = require('express')
+const app = express()
+const http = require('http')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const path = require('path')
-const app = express()
+const jwt = require('jsonwebtoken')
+const exjwt = require('express-jwt')
 const port = (process.env.PORT || '5000')
+//Sockets
+const server = http.createServer(app)
+const io = require('socket.io').listen(server)
 
 const apiLogin = require('./server/routes/apiLogin')
 const apiVersion = require('./server/routes/apiVersion')
@@ -14,6 +20,10 @@ const apiMusicGenres = require('./server/routes/apiMusicGenres')
 const apiInterests = require('./server/routes/apiInterests')
 const apiGenders = require('./server/routes/apiGenders')
 const apiGetAllUsers = require('./server/routes/apiGetAllUsers')
+const apiGetProfiles = require('./server/routes/apiGetProfiles')
+//Sockets
+require('./server/apiSockets.js')(io)
+
 //DB URI
 const { mongoDB } = require('./server/constants')
 
@@ -24,6 +34,10 @@ app.use(express.static(path.join(__dirname + '/client/build')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
+const jwtMW = exjwt({
+  secret: 'JeanPierrePernault'
+})
+
 //Routes
 app.use('/vibes/api/login', apiLogin)
 app.use('/vibes/api/version', apiVersion)
@@ -33,6 +47,11 @@ app.use('/vibes/api/musicGenres', apiMusicGenres)
 app.use('/vibes/api/interests', apiInterests)
 app.use('/vibes/api/genders', apiGenders)
 app.use('/vibes/api/getAllUsers', apiGetAllUsers)
+app.use('/vibes/api/getProfiles', apiGetProfiles)
+
+app.get('/tokentest', jwtMW, (req, res) => {
+  res.send("You are authenticated")
+})
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/build/index.html'))
@@ -45,5 +64,7 @@ const db = mongoose.connection
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
+//Sockets
+
 //Server
-app.listen(port, () => console.log(`connected on port ${port}`))
+server.listen(port, () => console.log(`connected on port ${port}`))

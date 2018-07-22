@@ -4,6 +4,7 @@ const updateUserSchema = mongoose.Schema({
   apiKey: {type: String, required: true},
   lastName: {type: String},
   firstName: {type: String},
+  description: {type: String},
   birthDate: {type: Date},
   city: {type: String},
 }, {collection: 'users'})

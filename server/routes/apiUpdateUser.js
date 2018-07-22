@@ -10,6 +10,7 @@ router.post('/', (req, res) => {
     _id,
     firstName,
     lastName,
+    description,
     birthDate,
     city,
   } = req.body
@@ -22,7 +23,7 @@ router.post('/', (req, res) => {
   if(API_KEY === apiKey) {
     if(_id) {
       updateUser.findOneAndUpdate({_id},
-        {$set: {firstName: firstName, lastName: lastName, birthDate: birthDate, city: city}},
+        {$set: {firstName: firstName, lastName: lastName, birthDate: birthDate, city: city, description: description}},
         (err, user) => {
           if(err) {
             res.status(400)

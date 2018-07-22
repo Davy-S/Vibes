@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import { Container } from 'semantic-ui-react'
 import AdminVersion from './adminVersion'
 import AdminUsers from './adminUsers'
 import { apiKey } from '../_shared/constants'
+import socket from '../_shared/sockets'
 
 class Admin extends Component {
   constructor() {
@@ -23,34 +25,42 @@ class Admin extends Component {
     })
       .then(res => res.json())
       .then(version => this.setState({ version }))
+      .then(this.handleGetAllUsers)
 
-      fetch('/vibes/api/getAllUsers', {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({ apiKey }),
-      })
-      .then(res => res.json())
-      .then(users => this.setState({ users }))
+    socket.on('fetchGetAllUsers', this.handleGetAllUsers)
   }
-  
+
+  handleGetAllUsers = () => {
+    fetch('/vibes/api/getAllUsers', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({ apiKey }),
+    })
+    .then(res => res.json())
+    .then(users => this.setState({ users }))
+  }
+
   render() {
     const {
       version,
       users: {users},
     } = this.state
     return (
-      <div>
-        <AdminVersion
-          {...version}
-        />
-      {users ?
-        <AdminUsers
-          users={users}
+      <div style={{paddingTop: "15%"}}>
+        <Container>
+
+          <AdminVersion
+            {...version}
           />
-        : null
-      }
+        {users ?
+          <AdminUsers
+            users={users}
+          />
+          : null
+        }
+      </Container>
       </div>
     )
   }
