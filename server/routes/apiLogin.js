@@ -25,11 +25,12 @@ router.post('/', (req, res) => {
         res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
       }
       if(user) {
+        console.log(user.role)
         bcrypt.compare(password, user.password, (err, result) => {
           if(result === true) {
             let token = jwt.sign({ id: user._id, email }, 'JeanPierrePernault', { expiresIn: 129600 })
             res.status(200)
-            res.json({userId: user._id, userToken: token, lastActiveDate: 'G po la date', refreshToken: 'Plus tard!'})
+            res.json({userId: user._id, userToken: token, role: user.role, lastActiveDate: 'G po la date', refreshToken: 'Plus tard!'})
           } else {
             res.status(400)
             res.json({code: "VIBES_BAD_LOGPWD", message: "Identifiants non reconnus"})

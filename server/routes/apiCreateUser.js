@@ -27,6 +27,7 @@ router.post('/', (req, res) => {
       }
 
       const newUser = new createUser({
+        role: 2,
         firstName,
         lastName,
         fullName,

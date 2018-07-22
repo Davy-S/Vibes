@@ -12,6 +12,9 @@ const LoginSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: Number
+  },
 }, {collection: 'users'})
 
 module.exports = mongoose.model('Login', LoginSchema)

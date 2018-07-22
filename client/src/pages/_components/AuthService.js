@@ -20,7 +20,7 @@ class AuthService {
               password
           })
       }).then(res => {
-          this.setToken(res.userToken, res.userId) // Setting the token in localStorage
+          this.setToken(res.userToken, res.userId, res.role) // Setting the token in localStorage
           return Promise.resolve(res);
       })
   }
@@ -45,10 +45,11 @@ class AuthService {
       }
   }
 
-  setToken = (userToken, userId) => {
+  setToken = (userToken, userId, userRole) => {
       // Saves user token to localStorage
       localStorage.setItem('userToken', userToken)
       localStorage.setItem('userId', userId)
+      localStorage.setItem('userRole', userRole)
   }
 
   getToken = () => {
@@ -59,11 +60,15 @@ class AuthService {
       // Retrieves the userId token from localStorage
       return localStorage.getItem('userId')
   }
-
+  getUserRole = () => {
+      // Retrieves the userId token from localStorage
+      return localStorage.getItem('userRole')
+  }
   logout = () => {
       // Clear user token and profile data from localStorage
       localStorage.removeItem('userToken')
       localStorage.removeItem('userId')
+      localStorage.removeItem('userRole')
   }
 
   getProfile = () => {

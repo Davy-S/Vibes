@@ -38,8 +38,11 @@ class Login extends Component {
 
     if(email && password) {
       this.Auth.login(apiKey, email, password)
-        .then(res =>{
-           this.props.history.replace('/profile')
+        .then(res => {if(res.role === 1) {
+          this.props.history.replace('/admin')
+        } else {
+          this.props.history.replace('/profile')
+        }
         })
         .catch(err =>{
           console.log(err)

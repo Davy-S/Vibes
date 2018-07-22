@@ -62,7 +62,6 @@ class adminUsers extends Component {
         body: JSON.stringify({ apiKey, _id, firstName, lastName, email, birthDate, city, description }),
       })
         .then(res => res.json())
-        .then(res => console.log(res))
         .then(socket.emit('usersUpdated'))
         .then(this.handleCloseEdit)
 
