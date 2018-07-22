@@ -53,10 +53,7 @@ class adminUsers extends Component {
       birthDate,
       description,
     } = this.state
-    console.log('submit')
-    if(apiKey && _id && firstName && lastName && email && city && birthDate) {
-      console.log('update')
-
+    if(apiKey && _id && firstName && lastName && email) {
       fetch('/vibes/api/updateProfile', {
         headers: {
           'Content-Type': 'application/json'
@@ -87,13 +84,11 @@ class adminUsers extends Component {
       description
     } = user
 
-    console.log(user)
     this.setState({ modalOpenEdit: true, _id, firstName, lastName, email, birthDate, city, description, editUser: user })
   }
 
   handleDeleteClick = (user) => {
     this.setState({ openModalDelete: true, deleteUser: user })
-    console.log(user)
   }
 
   render() {
