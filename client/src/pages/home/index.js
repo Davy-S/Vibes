@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button, Grid, Message } from 'semantic-ui-react'
+import AuthService from '../_components/AuthService'
 import { apiKey } from '../_shared/constants'
 
 class Home extends Component {
@@ -16,6 +17,8 @@ class Home extends Component {
       registerFailure: false,
       wrongInputFormat: false,
     }
+    this.Auth = new AuthService()
+
   }
 
   handleChange = (e, { value }) => {
@@ -23,7 +26,11 @@ class Home extends Component {
       [e.target.name]: value
     })
   }
-
+  componentWillMount(){
+    if(this.Auth.loggedIn()) {
+      this.props.history.replace('/profile')
+    }
+  }
 
   handleSubmit = (e) => {
     e.preventDefault()

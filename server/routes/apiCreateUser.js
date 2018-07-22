@@ -27,9 +27,8 @@ router.post('/', (req, res) => {
       }
 
       const newUser = new createUser({
-        apiKey,
-        lastName,
         firstName,
+        lastName,
         fullName,
         email,
         password: hash,

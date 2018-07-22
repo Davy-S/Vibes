@@ -18,7 +18,7 @@ class Login extends Component {
 
   componentWillMount(){
     if(this.Auth.loggedIn()) {
-      this.setState({ loginSuccess: true })
+      this.props.history.replace('/profile')
     }
   }
 
@@ -39,7 +39,6 @@ class Login extends Component {
     if(email && password) {
       this.Auth.login(apiKey, email, password)
         .then(res =>{
-           console.log(res)
            this.props.history.replace('/profile')
         })
         .catch(err =>{
