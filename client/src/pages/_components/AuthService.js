@@ -21,7 +21,7 @@ class AuthService {
           })
       }).then(res => {
           this.setToken(res.userToken, res.userId, res.role) // Setting the token in localStorage
-          return Promise.resolve(res);
+          return Promise.resolve(res)
       })
   }
 

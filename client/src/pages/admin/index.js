@@ -18,6 +18,9 @@ class Admin extends Component {
       userAdmin: false,
     }
   }
+  componentDidMount() {
+    socket.on('fetchGetAllUsers', this.handleGetAllUsers)
+  }
   componentWillMount() {
     const {
       checkRole
@@ -56,8 +59,6 @@ class Admin extends Component {
       .then(res => res.json())
       .then(version => this.setState({ version }))
       .then(this.handleGetAllUsers)
-
-    socket.on('fetchGetAllUsers', this.handleGetAllUsers)
   }
 
   handleGetAllUsers = () => {
@@ -78,23 +79,22 @@ class Admin extends Component {
       users: {users},
       userAdmin,
     } = this.state
+
     return (
       <div>
         <Button onClick={this.handleLogout} color="teal" content ="Logout" />
+        {userAdmin && users ?
         <div style={{paddingTop: "15%"}}>
           <Container>
-
             <AdminVersion
               {...version}
             />
-          {users ?
             <AdminUsers
               users={users}
             />
-            : null
-          }
-        </Container>
-        </div>
+          </Container>
+        </div> : null
+        }
       </div>
     )
   }
