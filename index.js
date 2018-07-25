@@ -21,6 +21,8 @@ const apiInterests = require('./server/routes/apiInterests')
 const apiGenders = require('./server/routes/apiGenders')
 const apiGetAllUsers = require('./server/routes/apiGetAllUsers')
 const apiGetProfiles = require('./server/routes/apiGetProfiles')
+const apiRequestFriend = require('./server/routes/apiRequestFriend')
+const apiAcceptFriend = require('./server/routes/apiAcceptFriend')
 //Sockets
 require('./server/apiSockets.js')(io)
 
@@ -48,10 +50,8 @@ app.use('/vibes/api/interests', apiInterests)
 app.use('/vibes/api/genders', apiGenders)
 app.use('/vibes/api/getAllUsers', apiGetAllUsers)
 app.use('/vibes/api/getProfiles', apiGetProfiles)
-
-app.get('/tokentest', jwtMW, (req, res) => {
-  res.send("You are authenticated")
-})
+app.use('/vibes/api/requestFriend', apiRequestFriend)
+app.use('/vibes/api/acceptFriend', apiAcceptFriend)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/build/index.html'))

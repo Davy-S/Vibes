@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Button } from 'semantic-ui-react'
+import { Container, Menu, Input } from 'semantic-ui-react'
 import AdminVersion from './adminVersion'
 import AdminUsers from './adminUsers'
 import { apiKey } from '../_shared/constants'
@@ -82,7 +82,17 @@ class Admin extends Component {
 
     return (
       <div>
-        <Button onClick={this.handleLogout} color="teal" content ="Logout" />
+        <Menu secondary fixed="top" inverted style={{paddingTop: "2%", paddingLeft: "3%", paddingRight: "3%"}}>
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Input icon='search' placeholder='Search...' />
+            </Menu.Item>
+            <Menu.Item
+              name='logout'
+              onClick={this.handleLogout}
+            />
+          </Menu.Menu>
+        </Menu>
         {userAdmin && users ?
         <div style={{paddingTop: "15%"}}>
           <Container>

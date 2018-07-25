@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const router = express.Router()
 const app = express()
-const Login = require('../model/Login')
+const Users = require('../model/Users')
 const { API_KEY } = require('../constants')
 
 router.post('/', (req, res) => {
@@ -19,13 +19,12 @@ router.post('/', (req, res) => {
   }
 
   if(API_KEY === apiKey) {
-    Login.findOne({email}, (err, user) => {
+    Users.findOne({email}, (err, user) => {
       if(err) {
         res.status(400)
         res.json({code: "VIBES_NOT_AVAILABLE", message: "Une opération de maintenance est en cours. Veuillez nous excuser pour la gêne occasionnée, on revient vite!"})
       }
       if(user) {
-        console.log(user.role)
         bcrypt.compare(password, user.password, (err, result) => {
           if(result === true) {
             let token = jwt.sign({ id: user._id, email }, 'JeanPierrePernault', { expiresIn: 129600 })

@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const app = express()
 const bcrypt = require('bcrypt')
-const createUser = require('../model/CreateUser')
+const User = require('../model/Users')
 const { API_KEY } = require('../constants')
 
 router.post('/', (req, res) => {
@@ -26,16 +26,21 @@ router.post('/', (req, res) => {
         console.log(err)
       }
 
-      const newUser = new createUser({
-        role: 2,
+      const newUser = new User({
+        email,
         firstName,
         lastName,
         fullName,
-        email,
         password: hash,
+        interestedIn: '',
+        city: '',
+        gender: '',
+        description: '',
+        bands: '',
+        role: 2,
       })
 
-      createUser.find({email}, (err, docs) => {
+      User.find({email}, (err, docs) => {
         if(!docs.length) {
           newUser.save((err) => {
             err ? handleError(err) :

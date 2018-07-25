@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const app = express()
-const getAllUsers = require('../model/GetAllUsers')
+const Users = require('../model/Users')
 const { API_KEY } = require('../constants')
 
 router.post('/', (req, res) => {
@@ -16,7 +16,7 @@ router.post('/', (req, res) => {
   }
   if(API_KEY === apiKey) {
     if(!_id) {
-      getAllUsers.find({}, (err, users) => {
+      Users.find({}, (err, users) => {
         if(users.length) {
           res.status(200)
           res.json({users})
@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
       })
     }
     if(_id) {
-      getAllUsers.find({_id}, (err, users) => {
+      Users.find({_id}, (err, users) => {
         if(users.length) {
           res.status(200)
           res.json({users})

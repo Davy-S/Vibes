@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const app = express()
-const updateUser = require('../model/UpdateUser')
+const User = require('../model/Users')
 const { API_KEY } = require('../constants')
 
 router.post('/', (req, res) => {
@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
 
   if(API_KEY === apiKey) {
     if(_id) {
-      updateUser.findOneAndUpdate({_id},
+      User.findOneAndUpdate({_id},
         {$set: {firstName: firstName, lastName: lastName, birthDate: birthDate, city: city, description: description}},
         (err, user) => {
           if(err) {
