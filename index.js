@@ -23,6 +23,7 @@ const apiGetAllUsers = require('./server/routes/apiGetAllUsers')
 const apiGetProfiles = require('./server/routes/apiGetProfiles')
 const apiRequestFriend = require('./server/routes/apiRequestFriend')
 const apiAcceptFriend = require('./server/routes/apiAcceptFriend')
+const apiRejectFriend = require('./server/routes/apiRejectFriend')
 //Sockets
 require('./server/apiSockets.js')(io)
 
@@ -52,6 +53,7 @@ app.use('/vibes/api/getAllUsers', apiGetAllUsers)
 app.use('/vibes/api/getProfiles', apiGetProfiles)
 app.use('/vibes/api/requestFriend', apiRequestFriend)
 app.use('/vibes/api/acceptFriend', apiAcceptFriend)
+app.use('/vibes/api/rejectFriend', apiRejectFriend)
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/client/build/index.html'))

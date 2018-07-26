@@ -10,6 +10,8 @@ router.post('/', (req, res) => {
   const {
     apiKey,
     nameContaining,
+    userId,
+    profileId,
    } = req.body
 
   if(API_KEY !== apiKey) {

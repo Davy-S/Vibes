@@ -17,11 +17,14 @@ class Profile extends Component {
       city: '',
       birthDate: '',
       description: '',
+      isMe: false,
+      isFriend: false,
+      isPending: false,
     }
     this.Auth = new AuthService()
   }
 
-  componentWillMount(){
+  componentWillMount() {
     if(!this.Auth.loggedIn()) {
       this.props.history.replace('/login')
     } else {
@@ -40,6 +43,72 @@ class Profile extends Component {
     })
     .then(res => res.json())
     .then(user => this.setState({user}))
+    .then(user => this.checkIsMe())
+  }
+
+  handleRequestFriend = () => {
+    const userId = this.Auth.getUserIdToken()
+    const requestedId = this.state.user.users[0]._id
+    fetch('/vibes/api/requestFriend', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({apiKey, userId, requestedId})
+    })
+    .then(res => res.json())
+    .then(res => console.log(res))
+    .then(this.fetchUserData())
+  }
+
+  handleAcceptFriend = () => {
+    const userId = this.Auth.getUserIdToken()
+    const requestedId = this.state.user.users[0]._id
+
+    fetch('/vibes/api/acceptFriend', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({apiKey, userId, requestedId})
+    })
+    .then(res => res.json())
+    .then(res => console.log(res))
+    .then(this.fetchUserData())
+  }
+
+  handleRejectFriend = () => {
+    const userId = this.Auth.getUserIdToken()
+    const requestedId = this.state.user.users[0]._id
+
+    fetch('/vibes/api/rejectFriend', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({apiKey, userId, requestedId})
+    })
+    .then(res => res.json())
+    .then(res => console.log(res))
+    .then(this.fetchUserData())
+  }
+
+  checkIsMe = () => {
+    if(this.state.user.users[0]._id === this.Auth.getUserProfile()) {
+      this.setState({isMe: true})
+    }
+  }
+
+  checkIsFriend = () => {
+    if(this.state.user.users[0].matches.includes(this.Auth.getUserProfile())) {
+      this.setState({isFriend: true})
+    }
+  }
+
+  checkIsPending = () => {
+    if(this.state.user.users[0].pendingMatches.includes(this.Auth.getUserProfile())) {
+      this.setState({isPending: true})
+    }
   }
 
   handleEditProfileClick = () => {
@@ -97,7 +166,6 @@ class Profile extends Component {
         .then(res => res.json())
         .then(this.fetchUserData())
         .then(this.handleCloseEdit)
-
     } else {
       this.setState({ editError: true })
     }
@@ -106,7 +174,24 @@ class Profile extends Component {
   render() {
     const {
       user,
+      isMe,
+      isFriend,
+      isPending,
     } = this.state
+
+    let profileBtn;
+    if(isMe) {
+      profileBtn = <Button content="Edit Profile" color="teal" onClick={this.handleEditProfileClick} style={{borderRadius: "60px"}} />
+    }
+    if(!isMe){
+      profileBtn = <Button content="Send Friend Request"  color="blue" onClick={this.handleRequestFriend} style={{borderRadius: "60px"}} />
+    }
+    if(isFriend) {
+      profileBtn = <Button content="Friend"  color="green" style={{borderRadius: "60px"}} />
+    }
+    if(isPending) {
+      profileBtn = <Button content="Friend Request Pending"  color="blue" style={{borderRadius: "60px"}} />
+    }
 
     return(
       <div>
@@ -141,7 +226,7 @@ class Profile extends Component {
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
-                  <Button content="Edit Profile"  color="teal" onClick={this.handleEditProfileClick} style={{borderRadius: "60px"}} />
+                  {profileBtn}
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
@@ -221,7 +306,6 @@ class Profile extends Component {
               </Modal.Content>
             </Modal>
           </div>
-
           :null
         }
       </div>

@@ -22,29 +22,15 @@ router.post('/', (req, res) => {
       Users.update({_id: userId}, {$pull: {pendingMatches: requestedId}}, (err) => {
         if(err) {
           res.status(400)
-          res.json({code: "VIBES_FRIEND_ACCEPT_KO", message: "L'utilisateur n'existe pas"})
+          res.json({code: "VIBES_FRIEND_REJECT_KO", message: "L'utilisateur n'existe pas"})
         } else {
           Users.update({_id: requestedId}, {$pull: {pendingMatches: userId}}, (err) => {
             if(err) {
               res.status(400)
-              res.json({code: "VIBES_FRIEND_ACCEPT_KO", message: "L'utilisateur n'existe pas"})
+              res.json({code: "VIBES_FRIEND_REJECT_KO", message: "L'utilisateur n'existe pas"})
             } else {
-              Users.update({_id: userId}, {$addToSet: {matches: requestedId}}, (err) => {
-                if(err) {
-                  res.status(400)
-                  res.json({code: "VIBES_FRIEND_ACCEPT_KO", message: "L'utilisateur n'existe pas"})
-                } else {
-                  Users.update({_id: requestedId}, {$addToSet: {matches: userId}}, (err) => {
-                    if(err) {
-                      res.status(400)
-                      res.json({code: "VIBES_FRIEND_ACCEPT_KO", message: "L'utilisateur n'existe pas"})
-                    } else {
-                      res.status(200)
-                      res.json({code: "VIBES_FRIEND_ACCEPT_OK", message: "Ami accepté"})
-                    }
-                  })
-                }
-              })
+              res.status(200)
+              res.json({code: "VIBES_FRIEND_REJECT_OK", message: "Demande d'ami rejetée"})
             }
           })
         }
