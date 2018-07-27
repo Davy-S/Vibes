@@ -4,7 +4,7 @@ import moment from 'moment'
 import AuthService from '../_components/AuthService'
 import { apiKey } from '../_shared/constants'
 
-class Profile extends Component {
+class UserProfile extends Component {
   constructor() {
     super()
     this.state = {
@@ -28,11 +28,11 @@ class Profile extends Component {
     if(!this.Auth.loggedIn()) {
       this.props.history.replace('/login')
     } else {
-      this.fetchUserData()
+      //this.fetchUserData()
     }
   }
 
-  fetchUserData = () => {
+  fetchUserProfileData = () => {
     const _id = this.Auth.getUserProfile()
     fetch('/vibes/api/getAllUsers', {
       method: "POST",
@@ -175,6 +175,7 @@ class Profile extends Component {
     } = this.state
 
     let profileBtn;
+
     if(isMe) {
       profileBtn = <Button content="Edit Profile" color="teal" onClick={this.handleEditProfileClick} style={{borderRadius: "60px"}} />
     }
@@ -293,4 +294,4 @@ class Profile extends Component {
   }
   }
 
-export default Profile
+export default UserProfile

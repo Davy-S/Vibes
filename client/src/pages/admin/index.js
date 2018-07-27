@@ -18,6 +18,7 @@ class Admin extends Component {
       userAdmin: false,
     }
   }
+
   componentDidMount() {
     socket.on('fetchGetAllUsers', this.handleGetAllUsers)
   }
@@ -82,17 +83,6 @@ class Admin extends Component {
 
     return (
       <div>
-        <Menu secondary fixed="top" inverted style={{paddingTop: "2%", paddingLeft: "3%", paddingRight: "3%"}}>
-          <Menu.Menu position='right'>
-            <Menu.Item>
-              <Input icon='search' placeholder='Search...' />
-            </Menu.Item>
-            <Menu.Item
-              name='logout'
-              onClick={this.handleLogout}
-            />
-          </Menu.Menu>
-        </Menu>
         {userAdmin && users ?
         <div style={{paddingTop: "15%"}}>
           <Container>
