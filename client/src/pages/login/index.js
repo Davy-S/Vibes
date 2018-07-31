@@ -41,7 +41,7 @@ class Login extends Component {
         .then(res => {if(res.role === 1) {
           this.props.history.replace('/admin')
         } else {
-          this.props.history.replace('/profile')
+          this.props.history.replace(`/profile/${res.userId}`)
         }
         })
         .catch(err =>{

@@ -1,18 +1,15 @@
 import React, { Component } from 'react'
 import { Button, Grid, Menu, Input, Modal, Header, Form, Message } from 'semantic-ui-react'
-import { Link } from 'react-router-dom'
 import moment from 'moment'
 import AuthService from '../_components/AuthService'
 import { apiKey } from '../_shared/constants'
 
-class Profile extends Component {
+class ProfileOld extends Component {
   constructor() {
     super()
 
     this.state = {
       user: '',
-      pendings: [],
-      fetchPendings: false,
       editError: false,
       modalOpenEdit: false,
       firstName: '',
@@ -21,39 +18,12 @@ class Profile extends Component {
       city: '',
       birthDate: '',
       description: '',
+      isMe: false,
+      isFriend: false,
+      isPending: false,
+      searchValue: '',
     }
     this.Auth = new AuthService()
-  }
-
-  fetchPendings = (user) => {
-    console.log("user", user);
-    let pendings = []
-    console.log("id", user.users[0].pendingMatches[0])
-      fetch('/vibes/api/getAllUsers', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({apiKey, _id: user.users[0].pendingMatches[0]})
-      })
-      .then(res => res.json())
-      .then(res => console.log(res))
-      .then(res => pendings.push({name: res.users[0].fullName, id: res.users[0]._id}))
-      .then(this.setState({pendings, fetchPendings: false}))
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { params } = nextProps.match
-
-    fetch('/vibes/api/getAllUsers', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({apiKey, _id: params.id}),
-    })
-    .then(res => res.json())
-    .then(user => this.setState({user, fetchPendings: true}))
   }
 
   componentWillMount() {
@@ -64,26 +34,42 @@ class Profile extends Component {
     }
   }
 
-  handleChange = (e, { value }) => {
-    this.setState({
-      [e.target.name]: value
-    })
-  }
-
   fetchUserData = () => {
-    const {
-      match
-    } = this.props
-    console.log("kikoo")
+    const _id = this.Auth.getUserProfile()
     fetch('/vibes/api/getAllUsers', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({apiKey, _id: match.params.id}),
+      body: JSON.stringify({apiKey, _id}),
     })
     .then(res => res.json())
-    .then(user => this.setState({user, fetchPendings: true}))
+    .then(user => this.setState({user}))
+    .then(user => this.checkIsMe())
+  }
+
+  checkIsMe = () => {
+    if(this.state.user.users[0]._id === this.Auth.getUserProfile()) {
+      this.setState({isMe: true})
+    } else {
+      this.setState({isMe: false})
+    }
+  }
+
+  handleSubmitSearch = (e) => {
+    e.preventDefault()
+    const nameContaining = this.state.searchValue
+
+    fetch('/vibes/api/getProfiles', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({apiKey, nameContaining}),
+    })
+    .then(res => res.json())
+    .then(user => this.setState({user}))
+    .then(user => this.checkIsMe())
   }
 
   handleRequestFriend = () => {
@@ -98,12 +84,11 @@ class Profile extends Component {
     })
     .then(res => res.json())
     .then(res => console.log(res))
-    .then(this.fetchUserData())
   }
 
   handleAcceptFriend = () => {
     const userId = this.Auth.getUserIdToken()
-    const requestedId = this.state.user.users[0].pendingMatches[0]
+    const requestedId = this.state.user.users[0]._id
 
     fetch('/vibes/api/acceptFriend', {
       headers: {
@@ -114,12 +99,11 @@ class Profile extends Component {
     })
     .then(res => res.json())
     .then(res => console.log(res))
-    .then(this.fetchUserData())
   }
 
   handleRejectFriend = () => {
     const userId = this.Auth.getUserIdToken()
-    const requestedId = this.state.user.users[0].pendingMatches[0]
+    const requestedId = this.state.user.users[0]._id
 
     fetch('/vibes/api/rejectFriend', {
       headers: {
@@ -130,7 +114,18 @@ class Profile extends Component {
     })
     .then(res => res.json())
     .then(res => console.log(res))
-    .then(this.fetchUserData())
+  }
+
+  checkIsFriend = () => {
+    if(this.state.user.users[0].matches.includes(this.Auth.getUserProfile())) {
+      this.setState({isFriend: true})
+    }
+  }
+
+  checkIsPending = () => {
+    if(this.state.user.users[0].pendingMatches.includes(this.Auth.getUserProfile())) {
+      this.setState({isPending: true})
+    }
   }
 
   handleEditProfileClick = () => {
@@ -151,6 +146,12 @@ class Profile extends Component {
 
   handleCloseEdit = () => {
     this.setState({modalOpenEdit: false})
+  }
+
+  handleChange = (e, { value }) => {
+    this.setState({
+      [e.target.name]: value
+    })
   }
 
   handleSubmitEditUser = (e) => {
@@ -185,28 +186,26 @@ class Profile extends Component {
   render() {
     const {
       user,
+      isMe,
+      isFriend,
+      isPending,
     } = this.state
-    console.log(user)
-
+    console.log(isMe)
+    if(user) {
+      console.log(this.state.user.users[0]._id)
+    }
     let profileBtn;
-
-    if(this.Auth.getUserIdToken() === this.props.match.params.id) {
+    let friendsList;
+    if(isMe) {
       profileBtn = <Button content="Edit Profile" color="teal" onClick={this.handleEditProfileClick} style={{borderRadius: "60px"}} />
     }
-
-    if((this.Auth.getUserIdToken() !== this.props.match.params.id) && !user.users[0].pendingMatches.includes(this.Auth.getUserIdToken())){
+    if(!isMe && !isFriend){
       profileBtn = <Button content="Send Friend Request"  color="blue" onClick={this.handleRequestFriend} style={{borderRadius: "60px"}} />
     }
-
-    if((this.Auth.getUserIdToken() !== this.props.match.params.id) && user.users[0].matches.includes(this.Auth.getUserIdToken())) {
+    if(!isMe && isFriend) {
       profileBtn = <Button content="Friend"  color="green" style={{borderRadius: "60px"}} />
     }
-
-    if((this.Auth.getUserIdToken() !== this.props.match.params.id) && user.users[0].pendingMatches.includes(this.Auth.getUserIdToken())) {
-      profileBtn = <Button content="Friend Request Pending"  color="blue" style={{borderRadius: "60px"}} />
-    }
-
-    if((this.Auth.getUserIdToken() !== this.props.match.params.id) && user.users[0].pendingMatches.includes(this.Auth.getUserIdToken())) {
+    if(!isMe && isPending) {
       profileBtn = <Button content="Friend Request Pending"  color="blue" style={{borderRadius: "60px"}} />
     }
 
@@ -221,22 +220,15 @@ class Profile extends Component {
               </Grid.Column>
               <Grid.Column>
                 <h1>Friends: {user.users[0].matches.length}</h1><br />
-                {(user.users[0].pendingMatches.length !== 0) && (this.Auth.getUserIdToken() === this.props.match.params.id)?
-                  <div>
+
+                  {isMe ?
                     <h1>Pending Invitations: {user.users[0].pendingMatches.length}</h1>
-                    <p>{user.users[0].pendingMatches[0]}</p>
-                    <Button.Group size='large'>
-                      <Button onClick={this.handleAcceptFriend}>Accept</Button>
-                      <Button.Or />
-                      <Button onClick={this.handleRejectFriend}>Decline</Button>
-                    </Button.Group>
-                  </div>
-                  : null
-                }
-              </Grid.Column>
+                    : null
+                  }
+                </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-              <Grid.Column floated="left" >
+              <Grid.Column>
                 {profileBtn}
               </Grid.Column>
             </Grid.Row>
@@ -247,7 +239,7 @@ class Profile extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column floated="left" >
-                <h3 style={{color: 'white'}}>Age: {user.users[0].birthDate}</h3>
+                <h3 style={{color: 'white'}}>BirthDate: {moment(user.users[0].birthDate).format('DD/MM/YYYY')}</h3>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
@@ -257,7 +249,7 @@ class Profile extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column floated="left" >
-                <h3 style={{color: 'white'}}>Description: {user.users[0].description}</h3>
+                  <h3 style={{color: 'white'}}>Description: {user.users[0].description}</h3>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -294,8 +286,9 @@ class Profile extends Component {
                   onChange={this.handleChange}
                 />
                 <Form.Input
-                  label='Age'
+                  label='BirthDate'
                   name="birthDate"
+                  type="date"
                   defaultValue={user.users[0].birthDate}
                   onChange={this.handleChange}
                 />
@@ -323,4 +316,4 @@ class Profile extends Component {
   }
 }
 
-export default Profile
+export default ProfileOld

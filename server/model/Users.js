@@ -11,7 +11,7 @@ const UsersSchema = mongoose.Schema({
   lastName: {type: String, required: true},
   fullName: {type: String, required: true},
   password: {type: String, required: true},
-  birthDate: {type: Date},
+  birthDate: {type: Number},
   interestedIn: {type: String},
   city: {type: String},
   gender: {type: String},

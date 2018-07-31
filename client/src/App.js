@@ -6,6 +6,7 @@ import Home from './pages/home'
 import Profile from './pages/profile'
 import UserProfile from './pages/userProfiles'
 import Navbar from './pages/_components/Navbar'
+import NotFound from './pages/notFound'
 import AuthService from './pages/_components/AuthService'
 import './App.css'
 
@@ -26,8 +27,9 @@ class App extends Component {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/admin" component={Admin} />
-          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/profile/:id" component={Profile} />
           <Route exact path="/user" component={UserProfile} />
+          <Route exact path="*" component={NotFound} />
         </Switch>
       </div>
     )
