@@ -1,6 +1,6 @@
 module.exports = (io) => {
+  let messages = []
   io.on('connection', (socket) => {
-    let messages = []
 
     socket.on('getMessages', () => {
       socket.emit('sendChatHistory', messages)
