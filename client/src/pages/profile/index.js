@@ -187,7 +187,6 @@ class Profile extends Component {
     const {
       user,
     } = this.state
-    console.log(user)
 
     let profileBtn;
 

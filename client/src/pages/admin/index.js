@@ -23,26 +23,30 @@ class Admin extends Component {
     socket.on('fetchGetAllUsers', this.handleGetAllUsers)
   }
   componentWillMount() {
+    this.setState({userAdmin: false})
     const {
       checkRole
     } = this.state
-
-    fetch('/vibes/api/getAllUsers', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({apiKey, _id: checkRole})
-    })
-    .then(res => res.json())
-    .then(res => {
-      if(res.users[0].role !== 1) {
-        this.props.history.replace('/profile')
-      } else {
-        this.setState({userAdmin: true})
-        this.handleFetchAdmin()
-      }
-    })
+    if(!checkRole) {
+      this.props.history.replace('/profile')
+    } else {
+      fetch('/vibes/api/getAllUsers', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({apiKey, _id: checkRole})
+      })
+      .then(res => res.json())
+      .then(res => {
+        if(res.users[0].role !== 1) {
+          this.props.history.replace('/')
+        } else {
+          this.setState({userAdmin: true})
+          this.handleFetchAdmin()
+        }
+      })
+    }
   }
   handleLogout = () => {
     this.Auth.logout()
